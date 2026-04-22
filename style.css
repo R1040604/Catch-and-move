@@ -1,0 +1,58 @@
+body{
+    background-color: aqua;
+}
+body {
+            font-family: Arial, sans-serif;
+        }
+
+        #game-area {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            background: #7DA9E6;
+            overflow: hidden;
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+
+        #player {
+            position: absolute;
+            bottom: 10px;
+            width: 80px;
+            left: 160px;
+        }
+
+        #player img {
+            width: 100%;
+        }
+
+        .fruit {
+            position: absolute;
+            width: 40px;
+        }
+
+        #hud {
+            width: 400px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+#gameover-screen {
+    width: 400px;
+    background: #1e2a4f;
+    color: white;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+}
+
+#gameover-screen h2 {
+    margin-top: 0;
+}
+
+#highscore-list {
+    padding-left: 0;
+    list-style: decimal;
+}

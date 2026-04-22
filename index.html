@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch & Move</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="status-text">Klik op start</div>
+    <button onclick="init()">Start</button>
+
+    <div id="hud">
+        <div id="score">Score: 0</div>
+        <div id="timer">30</div>
+    </div>
+
+    <div id="game-area">
+        <div id="fruit-container"></div>
+        <div id="player">
+            <img src="Mand met transparante achtergrond.png" alt="Mand">
+        </div>
+    </div>
+
+    <div id="gameover-screen" style="display:none;">
+        <h2>Game Over</h2>
+
+        <p id="final-score">Jouw score: 0</p>
+
+        <h3>Highscores</h3>
+        <ol id="highscore-list"></ol>
+
+        <p id="restart-countdown">
+            Nieuwe ronde start automatisch over 15 seconden
+        </p>
+    </div>
+
+
+    <div id="webcam-container"></div>
+    <div id="label-container"></div>
+
+    <!-- ✅ LIBRARIES (CORRECT) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <!-- ✅ GAME SCRIPT -->
+    <script>
+        /* =========================
+           CONFIG
+        ========================= */
+        const URL = "./model/";
+        const CONFIDENCE_THRESHOLD = 0.5;
+
+        /* =========================
+           TEACHABLE MACHINE
+        ========================= */
+        let model, webcam, labelContainer, maxPredictions;
+
+        /* =========================
+           GAME STATE
+        ========================= */
+        let gameState = "idle";
+        let timeLeft = 30;
+        let gameTimer = null;
+        let middleCounter = 0;
+        let wasOutOfView = false;
+
+
+        let restartCountdown = 15;
+        let restartInterval = null;
+
+
+        /* =========================
+           GAME OBJECTS
+        ========================= */
+        let fruits = [];
+        let fruitInterval = null;
+        let score = 0;
+
+        const fruitImages = [
+            "images/apple.png",
+            "images/banana.png",
+            "images/grapes.png"
+        ];
+
+        const player = document.getElementById("player");
+
+        const PLAYER_POSITIONS = {
+            left: 40,
+            middle: 160,
+            right: 280
+        };
+
+        /* =========================
+           INIT
+        ========================= */
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            webcam = new tmImage.Webcam(200, 200, true);
+            await webcam.setup();
+            await webcam.play();
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+            labelContainer = document.getElementById("label-container");
+            labelContainer.innerHTML = "";
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+
+            setStatus("Ga in het midden staan om te starten");
+            window.requestAnimationFrame(loop);
+        }
+
+        /* =========================
+           LOOP
+        ========================= */
+        async function loop() {
+            webcam.update();
+            await predict();
+
+            if (gameState === "playing") {
+                updateFruits();
+            }
+
+            window.requestAnimationFrame(loop);
+        }
+
+        /* =========================
+           PREDICT
+        ========================= */
+        async function predict() {
+            const predictions = await model.predict(webcam.canvas);
+
+            predictions.forEach((p, i) => {
+                labelContainer.childNodes[i].innerText =
+                    p.className + ": " + p.probability.toFixed(2);
+            });
+
+            const highest = predictions.reduce((max, p) =>
+                p.probability > max.probability ? p : max
+            );
+
+            handleGameFlow(highest.className.toLowerCase(), highest.probability);
+        }
+
+        /* =========================
+           GAME FLOW
+        ========================= */
+        function handleGameFlow(label, confidence) {
+
+            // PLAYER MOVEMENT
+            if (gameState === "playing" && PLAYER_POSITIONS[label] !== undefined) {
+                player.style.left = PLAYER_POSITIONS[label] + "px";
+            }
+
+            // START
+            if (gameState === "idle") {
+                if (label === "middle" && confidence >= CONFIDENCE_THRESHOLD) {
+                    middleCounter++;
+                } else {
+                    middleCounter = 0;
+                }
+
+                if (middleCounter > 15) {
+                    middleCounter = 0;
+                    startGame();
+                }
+            }
+
+            // RESTART
+            if (gameState === "gameover") {
+                if (confidence < CONFIDENCE_THRESHOLD) {
+                    wasOutOfView = true;
+                }
+
+                if (wasOutOfView && label === "middle" && confidence >= CONFIDENCE_THRESHOLD) {
+                    resetToIdle();
+                }
+            }
+        }
+
+        /* =========================
+           GAME STATES
+        ========================= */
+        function startGame() {
+            gameState = "playing";
+            wasOutOfView = false;
+            score = 0;
+            timeLeft = 30;
+
+            updateScoreUI();
+            setStatus("Spelen...");
+            startTimer();
+
+            fruitInterval = setInterval(spawnFruit, 1000);
+        }
+
+        function endGame() {
+            clearInterval(gameTimer);
+            clearInterval(fruitInterval);
+
+            fruits.forEach(f => f.element.remove());
+            fruits = [];
+
+            gameState = "gameover";
+            setStatus("Tijd is om! Stap uit beeld en kom terug.");
+        }
+
+        function resetToIdle() {
+            gameState = "idle";
+            wasOutOfView = false;
+            setStatus("Ga in het midden staan om te starten");
+        }
+
+        /* =========================
+           TIMER
+        ========================= */
+        function startTimer() {
+            clearInterval(gameTimer);
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        /* =========================
+           FRUIT
+        ========================= */
+        function spawnFruit() {
+            const fruit = document.createElement("img");
+            fruit.classList.add("fruit");
+
+            fruit.src = fruitImages[Math.floor(Math.random() * fruitImages.length)];
+            fruit.style.left = Math.random() * 360 + "px";
+            fruit.style.top = "0px";
+
+            document.getElementById("fruit-container").appendChild(fruit);
+
+            fruits.push({ element: fruit, y: 0 });
+        }
+
+        function updateFruits() {
+            const playerRect = player.getBoundingClientRect();
+
+            fruits = fruits.filter(f => {
+                f.y += 2;
+                f.element.style.top = f.y + "px";
+
+                const fruitRect = f.element.getBoundingClientRect();
+                const caught =
+                    fruitRect.bottom >= playerRect.top &&
+                    fruitRect.left < playerRect.right &&
+                    fruitRect.right > playerRect.left;
+
+                if (caught) {
+                    f.element.remove();
+                    score++;
+                    updateScoreUI();
+                    return false;
+                }
+
+                if (f.y > 400) {
+                    f.element.remove();
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        /* =========================
+           UI
+        ========================= */
+        function updateScoreUI() {
+            document.getElementById("score").innerText = "Score: " + score;
+        }
+
+        function setStatus(text) {
+            document.getElementById("status-text").innerText = text;
+        }
+    </script>
+
+</body>
+
+</html>
+``
