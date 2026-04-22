@@ -290,6 +290,29 @@
         function setStatus(text) {
             document.getElementById("status-text").innerText = text;
         }
+
+        function saveHighscore(newScore) {
+            const scores = JSON.parse(localStorage.getItem("highscores")) || [];
+
+            scores.push(newScore);
+            scores.sort((a, b) => b - a); // hoogste eerst
+            scores.splice(5); // top 5 bewaren
+
+            localStorage.setItem("highscores", JSON.stringify(scores));
+        }
+
+        function renderHighscores() {
+            const scores = JSON.parse(localStorage.getItem("highscores")) || [];
+            const list = document.getElementById("highscore-list");
+            list.innerHTML = "";
+
+            scores.forEach(score => {
+                const li = document.createElement("li");
+                li.innerText = score;
+                list.appendChild(li);
+            });
+        }
+
     </script>
 
 </body>
