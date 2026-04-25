@@ -206,23 +206,61 @@
             fruitInterval = setInterval(spawnFruit, 1000);
         }
 
+
         function endGame() {
             clearInterval(gameTimer);
             clearInterval(fruitInterval);
 
+            // Fruit opruimen
             fruits.forEach(f => f.element.remove());
             fruits = [];
 
             gameState = "gameover";
-            setStatus("Tijd is om! Stap uit beeld en kom terug.");
+
+            // ✅ HIGH SCORE OPSLAAN
+            saveHighscore(score);
+
+            // ✅ GAME AREA VERBERGEN
+            document.getElementById("game-area").style.display = "none";
+            document.getElementById("hud").style.display = "none";
+
+            // ✅ GAME OVER SCHERM TONEN
+            const gameOverScreen = document.getElementById("gameover-screen");
+            gameOverScreen.style.display = "block";
+
+            // ✅ SCORE TONEN
+            document.getElementById("final-score").innerText =
+                "Jouw score: " + score;
+
+            // ✅ HIGHSCORES TONEN
+            renderHighscores();
+
+            // ✅ COUNTDOWN STARTEN
+            startRestartCountdown();
         }
+
 
         function resetToIdle() {
             gameState = "idle";
             wasOutOfView = false;
+
+            clearInterval(restartInterval);
+
+            // ✅ GAME OVER VERBERGEN
+            document.getElementById("gameover-screen").style.display = "none";
+
+            // ✅ GAME AREA TERUG TONEN
+            document.getElementById("game-area").style.display = "block";
+            document.getElementById("hud").style.display = "flex";
+
+            // Reset UI
+            score = 0;
+            timeLeft = 30;
+            document.getElementById("timer").innerText = 30;
+            updateScoreUI();
+
             setStatus("Ga in het midden staan om te starten");
         }
-
         /* =========================
            TIMER
         ========================= */
@@ -314,6 +352,27 @@
                 list.appendChild(li);
             });
         }
+
+        function startRestartCountdown() {
+            restartCountdown = 15;
+            updateRestartCountdownText();
+
+            restartInterval = setInterval(() => {
+                restartCountdown--;
+                updateRestartCountdownText();
+
+                if (restartCountdown <= 0) {
+                    clearInterval(restartInterval);
+                    resetToIdle();
+                }
+            }, 1000);
+        }
+
+        function updateRestartCountdownText() {
+            document.getElementById("restart-countdown").innerText =
+                "Nieuwe ronde start automatisch over " + restartCountdown + " seconden";
+        }
+
 
     </script>
 
