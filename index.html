@@ -346,9 +346,12 @@
             const list = document.getElementById("highscore-list");
             list.innerHTML = "";
 
-            scores.forEach(score => {
+            scores.forEach(item => {
+                // ✅ Skip oude of corrupte data
+                if (!item.player || item.score === undefined) return;
+
                 const li = document.createElement("li");
-                li.innerText = score;
+                li.innerText = item.player + ": " + item.score;
                 list.appendChild(li);
             });
         }
