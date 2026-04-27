@@ -161,7 +161,7 @@
 
             // PLAYER MOVEMENT
             if (gameState === "playing" && PLAYER_POSITIONS[label] !== undefined) {
-                player.style.left = PLAYER_POSITIONS[label] + "px";
+                player.style.transform = `translateX(${PLAYER_POSITIONS[label]}px)`;
             }
 
             // START
