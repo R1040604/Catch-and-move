@@ -48,6 +48,7 @@
         src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
     <!-- ✅ GAME SCRIPT -->
+    <!-- ✅ GAME SCRIPT -->
     <script>
         /* =========================
            CONFIG
@@ -199,6 +200,7 @@
             score = 0;
             timeLeft = 30;
 
+            player.style.transform = `translateX(${PLAYER_POSITIONS.middle}px)`;
             updateScoreUI();
             setStatus("Spelen...");
             startTimer();
@@ -234,12 +236,11 @@
 
             // ✅ HIGHSCORES TONEN
             renderHighscores();
+            saveHighscore(score);
 
             // ✅ COUNTDOWN STARTEN
             startRestartCountdown();
         }
-
-
         function resetToIdle() {
             gameState = "idle";
             wasOutOfView = false;
@@ -261,6 +262,7 @@
 
             setStatus("Ga in het midden staan om te starten");
         }
+
         /* =========================
            TIMER
         ========================= */
@@ -331,11 +333,18 @@
             document.getElementById("status-text").innerText = text;
         }
 
+
         function saveHighscore(newScore) {
             const scores = JSON.parse(localStorage.getItem("highscores")) || [];
 
-            scores.push(newScore);
-            scores.sort((a, b) => b - a); // hoogste eerst
+            const playerName = generatePlayerName();
+
+            scores.push({
+                player: playerName,
+                score: newScore
+            });
+
+            scores.sort((a, b) => b.score - a.score); // hoogste eerst
             scores.splice(5); // top 5 bewaren
 
             localStorage.setItem("highscores", JSON.stringify(scores));
@@ -356,6 +365,7 @@
             });
         }
 
+
         function startRestartCountdown() {
             restartCountdown = 15;
             updateRestartCountdownText();
@@ -374,6 +384,11 @@
         function updateRestartCountdownText() {
             document.getElementById("restart-countdown").innerText =
                 "Nieuwe ronde start automatisch over " + restartCountdown + " seconden";
+        }
+
+        function generatePlayerName() {
+            const randomNumber = Math.floor(Math.random() * 100) + 1;
+            return "Player " + randomNumber;
         }
 
 
