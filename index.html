@@ -9,22 +9,22 @@
 </head>
 
 <body>
+    <div id="app">
+        <div id="status-text">Klik op start</div>
+        <button onclick="init()">Start</button>
 
-    <div id="status-text">Klik op start</div>
-    <button onclick="init()">Start</button>
+        <div id="hud">
+            <div id="score">Score: 0</div>
+            <div id="timer">30</div>
+        </div>
 
-    <div id="hud">
-        <div id="score">Score: 0</div>
-        <div id="timer">30</div>
-    </div>
-
-    <div id="game-area">
-        <div id="fruit-container"></div>
-        <div id="player">
-            <img src="Mand met transparante achtergrond.png" alt="Mand">
+        <div id="game-area">
+            <div id="fruit-container"></div>
+            <div id="player">
+                <img src="Mand met transparante achtergrond.png" alt="Mand">
+            </div>
         </div>
     </div>
-
     <div id="gameover-screen" style="display:none;">
         <h2>Game Over</h2>
 
