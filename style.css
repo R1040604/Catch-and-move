@@ -14,8 +14,8 @@ body {
     display: none;
 }
 #start-screen {
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 600px;
     background: #1e2a4f;
     color: white;
     border-radius: 16px;
@@ -46,8 +46,8 @@ body {
 }
         #game-area {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 600px;
+            height: 600px;
             background: #7DA9E6;
             overflow: hidden;
             border-radius: 16px;
