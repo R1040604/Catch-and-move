@@ -75,7 +75,7 @@ body {
         }
 
         #hud {
-            width: 400px;
+            width: 600px;
             display: flex;
             justify-content: space-between;
             font-weight: bold;
@@ -83,7 +83,7 @@ body {
         }
         
 #gameover-screen {
-    width: 400px;
+    width: 600px;
     background: #1e2a4f;
     color: white;
     border-radius: 16px;
