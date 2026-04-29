@@ -13,6 +13,9 @@ body {
 #game-area, #hud{
     display: none;
 }
+#score, #timer{
+    font-size: larger;
+}
 #start-screen {
     width: 600px;
     height: 600px;
