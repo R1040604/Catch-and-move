@@ -210,12 +210,23 @@
         function startGame() {
             gameState = "playing";
             wasOutOfView = false;
+
+            // ✅ STARTSCHERM VERBERGEN
+            document.getElementById("start-screen").style.display = "none";
+
+            // ✅ GAME SCHERM TONEN
+            document.getElementById("game-area").style.display = "block";
+            document.getElementById("hud").style.display = "flex";
+
+            // Mand netjes centreren
+            player.style.transform = `translateX(${PLAYER_POSITIONS.middle}px)`;
+
             score = 0;
             timeLeft = 30;
-
-            player.style.transform = `translateX(${PLAYER_POSITIONS.middle}px)`;
             updateScoreUI();
-            setStatus("Spelen...");
+            document.getElementById("timer").innerText = timeLeft;
+
+            setStatus(""); // statustekst niet nodig tijdens spelen
             startTimer();
 
             fruitInterval = setInterval(spawnFruit, 1000);
@@ -263,17 +274,19 @@
             // ✅ GAME OVER VERBERGEN
             document.getElementById("gameover-screen").style.display = "none";
 
-            // ✅ GAME AREA TERUG TONEN
-            document.getElementById("game-area").style.display = "block";
-            document.getElementById("hud").style.display = "flex";
+            // ✅ GAME VERBERGEN
+            document.getElementById("game-area").style.display = "none";
+            document.getElementById("hud").style.display = "none";
 
-            // Reset UI
+            // ✅ STARTSCHERM TERUG TONEN
+            document.getElementById("start-screen").style.display = "flex";
+
             score = 0;
             timeLeft = 30;
-            document.getElementById("timer").innerText = 30;
+            document.getElementById("timer").innerText = timeLeft;
             updateScoreUI();
 
-            setStatus("Ga in het midden staan om te starten");
+            setStatus("");
         }
 
         /* =========================
