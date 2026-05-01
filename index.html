@@ -74,7 +74,7 @@
            CONFIG
         ========================= */
         const URL = "./model/";
-        const CONFIDENCE_THRESHOLD = 0.5;
+        const CONFIDENCE_THRESHOLD = 0.3;
 
         /* =========================
            TEACHABLE MACHINE
@@ -192,18 +192,20 @@
             }
 
             // START
+
             if (gameState === "idle") {
-                if (label === "middle" && confidence >= CONFIDENCE_THRESHOLD) {
+                if (label === "middle" && confidence > 0.3) {
                     middleCounter++;
                 } else {
                     middleCounter = 0;
                 }
 
-                if (middleCounter > 15) {
+                if (middleCounter > 20) {
                     middleCounter = 0;
                     startGame();
                 }
             }
+
 
             // RESTART
             if (gameState === "gameover") {
