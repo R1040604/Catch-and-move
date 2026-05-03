@@ -74,7 +74,7 @@
            CONFIG
         ========================= */
         const URL = "./model/";
-        const CONFIDENCE_THRESHOLD = 0.3;
+        const CONFIDENCE_THRESHOLD = 0.5;
 
         /* =========================
            TEACHABLE MACHINE
@@ -194,7 +194,7 @@
             // START
 
             if (gameState === "idle") {
-                if (label === "middle" && confidence > 0.3) {
+                if (label === "middle") {
                     middleCounter++;
                 } else {
                     middleCounter = 0;

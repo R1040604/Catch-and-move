@@ -130,7 +130,7 @@ body {
 /* Webcam zelf */
 #webcam-container canvas {
     width: 600px;
-    height: auto;
+    height: 600px;
 
     opacity: 0.35;                /* subtiel */
     filter: blur(2px) saturate(0.8);
