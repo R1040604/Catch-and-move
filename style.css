@@ -154,22 +154,6 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-#silhouette {
-    position: absolute;
-    bottom: 10px;
-    width: 80px;
-    opacity: 0;
-    pointer-events: none;
-    
-    /* zelfde animatie als mand */
-    transition: transform 0.25s ease-in-out, opacity 0.3s ease-in-out;
-    z-index: 1;
-}
-
-#silhouette img {
-    width: 100%;
-}
-
 #webcam-container {
     display: flex;
     justify-content: center;
