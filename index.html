@@ -11,38 +11,38 @@
 <body>
 
     <div id="app">
-
-        <!-- START SCREEN -->
-        <div id="start-screen">
-            <h1>Catch & Move</h1>
-
-
-            <p class="instruction">
-                Ga in het midden staan<br>
-                om het spel te starten
-            </p>
-
-            <p class="sub-instruction">
-                Beweeg daarna links en rechts om het vallend fruit te vangen
-            </p>
-        </div>
-
         <!-- GAMEPLAY -->
         <div id="hud">
             <div id="score">Score: 0</div>
             <div id="timer">30</div>
         </div>
-
-        <!-- ✅ Webcam komt hier -->
-        <div id="webcam-container"></div>
         <div id="game-area">
+            <!-- ✅ CAMERA ACHTERGROND -->
+            <div id="webcam-container"></div>
+
+            <!-- START OVERLAY -->
+            <div id="start-screen">
+                <h1>Catch & Move</h1>
+                <p class="instruction">
+                    Ga in het midden staan<br>
+                    om het spel te starten
+                </p>
+                <p class="sub-instruction">
+                    Beweeg daarna links en rechts om het vallend fruit te vangen
+                </p>
+            </div>
+
             <div id="fruit-container"></div>
+
             <div id="player">
                 <img src="Mand met transparante achtergrond.png" alt="Mand">
             </div>
+
         </div>
 
     </div>
+
+
 
 
     <div id="gameover-screen" style="display:none;">
@@ -156,10 +156,7 @@
             webcam.update();
             await predict();
 
-            if (gameState === "playing") {
-                updateFruits();
-            }
-
+            updateFruits();
             window.requestAnimationFrame(loop);
         }
 
@@ -192,20 +189,18 @@
             }
 
             // START
-
             if (gameState === "idle") {
-                if (label === "middle") {
+                if (label === "middle" && confidence >= CONFIDENCE_THRESHOLD) {
                     middleCounter++;
                 } else {
                     middleCounter = 0;
                 }
 
-                if (middleCounter > 20) {
+                if (middleCounter > 15) {
                     middleCounter = 0;
                     startGame();
                 }
             }
-
 
             // RESTART
             if (gameState === "gameover") {
@@ -224,6 +219,10 @@
         ========================= */
 
         function startGame() {
+
+            document.getElementById("start-screen").style.display = "none";
+            document.getElementById("hud").style.display = "flex";
+
             gameState = "playing";
             wasOutOfView = false;
 
@@ -291,23 +290,25 @@
 
             clearInterval(restartInterval);
 
-            // ✅ GAME OVER VERBERGEN
+            // ✅ Game Over scherm weg
             document.getElementById("gameover-screen").style.display = "none";
 
-            // ✅ GAME VERBERGEN
-            document.getElementById("game-area").style.display = "none";
+            // ✅ Speelveld TERUG tonen
+            document.getElementById("game-area").style.display = "block";
+
+            // ✅ HUD verbergen
             document.getElementById("hud").style.display = "none";
 
-            // ✅ STARTSCHERM TERUG TONEN
+            // ✅ Startscherm overlay terug tonen
             document.getElementById("start-screen").style.display = "flex";
 
+            // Reset waarden
             score = 0;
             timeLeft = 30;
-            document.getElementById("timer").innerText = timeLeft;
             updateScoreUI();
-
-            setStatus("");
+            document.getElementById("timer").innerText = timeLeft;
         }
+
 
         /* =========================
            TIMER
@@ -340,17 +341,34 @@
         }
 
         function updateFruits() {
+            const gameAreaRect = document
+                .getElementById("game-area")
+                .getBoundingClientRect();
+
             const playerRect = player.getBoundingClientRect();
 
             fruits = fruits.filter(f => {
+                if (!f.element) return false;
+
                 f.y += 2;
                 f.element.style.top = f.y + "px";
 
                 const fruitRect = f.element.getBoundingClientRect();
+
+                // Corrigeer naar game-area
+                const fruitTop = fruitRect.top - gameAreaRect.top;
+                const fruitBottom = fruitRect.bottom - gameAreaRect.top;
+                const fruitLeft = fruitRect.left - gameAreaRect.left;
+                const fruitRight = fruitRect.right - gameAreaRect.left;
+
+                const playerTop = playerRect.top - gameAreaRect.top;
+                const playerLeft = playerRect.left - gameAreaRect.left;
+                const playerRight = playerRect.right - gameAreaRect.left;
+
                 const caught =
-                    fruitRect.bottom >= playerRect.top &&
-                    fruitRect.left < playerRect.right &&
-                    fruitRect.right > playerRect.left;
+                    fruitBottom >= playerTop &&
+                    fruitLeft < playerRight &&
+                    fruitRight > playerLeft;
 
                 if (caught) {
                     f.element.remove();
@@ -359,7 +377,7 @@
                     return false;
                 }
 
-                if (f.y > 400) {
+                if (f.y > 600) { // onderkant game-area
                     f.element.remove();
                     return false;
                 }
@@ -367,6 +385,7 @@
                 return true;
             });
         }
+
 
         /* =========================
            UI
@@ -451,7 +470,7 @@
                 list.appendChild(li);
             });
         }
-        ``
+
 
 
 
