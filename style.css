@@ -152,6 +152,11 @@ body {
 
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
+#score{
+  font-size: 36px;
+  font-weight: 800;
+  padding: 6px 14px;
+}
 
 #webcam-container {
     display: flex;
