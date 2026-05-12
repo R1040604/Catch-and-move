@@ -441,7 +441,11 @@
                 // ✅ HUIDIGE SPELER HIGHLIGHTEN
                 if (item.player === currentPlayerName) {
                     li.classList.add("current-player");
+                    if (index === 0) li.classList.add - ("first-place");
+                    if (index === 1) li.classList.add - ("second-place");
+                    if (index === 2) li.classList.add - ("third-place");
                 }
+
 
                 const left = document.createElement("div");
                 left.classList.add("score-left");
