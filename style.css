@@ -229,8 +229,8 @@ position: absolute;
 
 /* Medaille */
 .medal {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
 
   display: flex;
@@ -254,30 +254,24 @@ position: absolute;
 }
 
 
-#webcam-container canvas {
-    border-radius: 16px;
-    margin: 16px 0;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    outline: 3px solid rgba(255,255,255,0.3);
-}
 
 /* 🥇 GOUD */
+
 .first-place {
     border: 4px solid #f5c542;
-    box-shadow: 0 0 12px rgba(245, 197, 66, 0.7);
+    box-shadow: 0 0 16px rgba(245, 197, 66, 0.9);
 }
 
-/* 🥈 ZILVER */
 .second-place {
     border: 4px solid #cfd2d6;
-    box-shadow: 0 0 12px rgba(200, 200, 200, 0.7);
+    box-shadow: 0 0 16px rgba(220, 220, 220, 0.9);
 }
 
-/* 🥉 BRONS */
 .third-place {
     border: 4px solid #cd7f32;
-    box-shadow: 0 0 12px rgba(205, 127, 50, 0.6);
+    box-shadow: 0 0 16px rgba(205, 127, 50, 0.9);
 }
+
 .medal.gold {
   background: linear-gradient(145deg, #f5c542, #d4a017);
   box-shadow: 0 0 10px rgba(245, 197, 66, 0.8);
