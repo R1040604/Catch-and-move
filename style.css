@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   min-height: 100vh;
@@ -27,7 +26,6 @@ body {
   font-size: 18px;
 
 }
-
 
 #game-area {
     position: relative;
@@ -60,7 +58,6 @@ body {
         contrast(1.1);
 
     mix-blend-mode: multiply;
-
 }
 
 #start-screen {
@@ -137,14 +134,20 @@ body {
     height: 100%;
     z-index: 0;
 }
+#score{
+  font-size: 36px;
+  font-weight: 800;
+  padding: 6px 14px
+}
 
 #timer {
   font-size: 36px;                 /* GROTER */
   font-weight: 800;
   color: white;
 
-  background: rgb(6, 6, 142);           
+  background: #020271;        
   padding: 6px 14px;
+  border: 2px solid aqua;
   border-radius: 40px;
 
   min-width: 70px;
@@ -152,11 +155,7 @@ body {
 
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
-#score{
-  font-size: 36px;
-  font-weight: 800;
-  padding: 6px 14px;
-}
+
 
 #webcam-container {
     display: flex;
@@ -249,10 +248,11 @@ body {
 }
 
 .current-player {
-    border: 2px solid #4caf50;
+    border: 4px solid #4caf50;
     background: linear-gradient(145deg, #e8fbe8, #ffffff);
     box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
 }
+
 
 #webcam-container canvas {
     border-radius: 16px;
@@ -260,7 +260,6 @@ body {
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     outline: 3px solid rgba(255,255,255,0.3);
 }
-
 
 /* 🥇 GOUD */
 .first-place {

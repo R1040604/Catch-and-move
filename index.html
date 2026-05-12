@@ -107,13 +107,12 @@
             "images/banana.png",
             "images/Druiven.png",
             "images/kiwigreen.png",
+            "images/kiwigreen.png",
             "images/framboos.png",
             "images/sinaasappel.png",
             "images/blauwbes.png",
             "images/peer.png",
-            "images/mangoemoji.png",
-            "images/aardbei",
-            "images/braambes"
+            "images/mangoemoji.png"
         ];
 
         const player = document.getElementById("player");
@@ -328,7 +327,7 @@
                 if (timeLeft <= 0) {
                     endGame();
                 }
-            }, 1000);
+            }, 1000)
         }
 
         /* =========================
@@ -441,11 +440,12 @@
                 // ✅ HUIDIGE SPELER HIGHLIGHTEN
                 if (item.player === currentPlayerName) {
                     li.classList.add("current-player");
-                    if (index === 0) li.classList.add - ("first-place");
-                    if (index === 1) li.classList.add - ("second-place");
-                    if (index === 2) li.classList.add - ("third-place");
-                }
 
+                    // extra nadruk indien podium
+                    if (index === 0) li.classList.add("first-place");
+                    if (index === 1) li.classList.add("second-place");
+                    if (index === 2) li.classList.add("third-place");
+                }
 
                 const left = document.createElement("div");
                 left.classList.add("score-left");
@@ -453,18 +453,26 @@
                 const medal = document.createElement("div");
                 medal.classList.add("medal");
 
+
                 if (index === 0) {
                     medal.classList.add("gold");
                     medal.innerText = "1";
+                    li.classList.add("first-place");
+
                 } else if (index === 1) {
                     medal.classList.add("silver");
                     medal.innerText = "2";
+                    li.classList.add("second-place");
+
                 } else if (index === 2) {
                     medal.classList.add("bronze");
                     medal.innerText = "3";
+                    li.classList.add("third-place");
+
                 } else {
                     medal.style.opacity = "0";
                 }
+
 
                 const name = document.createElement("span");
                 name.innerText = item.player;
@@ -520,3 +528,4 @@
 </body>
 
 </html>
+``
