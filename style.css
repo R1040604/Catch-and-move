@@ -61,7 +61,6 @@ body {
 }
 
 #start-screen {
-
 position: absolute;
   inset: 0;
   z-index: 3;
@@ -75,7 +74,6 @@ position: absolute;
   text-align: center;
 
   color: white;
-
 }
 
 
@@ -149,6 +147,7 @@ position: absolute;
 
   background: #020271;        
   padding: 6px 14px;
+
   border-radius: 40px;
 
   min-width: 70px;
@@ -175,7 +174,7 @@ position: absolute;
 
         
 #gameover-screen {
-    width: 400px;
+    width: 600px;
     background: #1e2a4f;
     color: white;
     border-radius: 16px;
@@ -194,7 +193,7 @@ position: absolute;
 
 #early-restart-hint {
     margin-top: 12px;
-    font-size: 16px;
+    font-size: 14px;
     opacity: 0.8;
 }
 
@@ -241,6 +240,11 @@ position: absolute;
   font-weight: bold;
   color: white;
   font-size: 18px;
+}
+
+/* Medaille kleuren */
+.medal.gold {
+  background: linear-gradient(145deg, #f5c542, #d4a017);
 }
 
 .current-player {
