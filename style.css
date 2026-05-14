@@ -241,7 +241,12 @@ position: absolute;
   color: white;
   font-size: 18px;
 }
-
+.medal.rankt{
+  background: #e0e0e0;
+  color: #1e2a4f;
+  font-weight: bold;
+  box-shadow: none;
+}
 /* Medaille kleuren */
 .medal.gold {
   background: linear-gradient(145deg, #f5c542, #d4a017);

@@ -466,7 +466,8 @@
                     li.classList.add("third-place");
 
                 } else {
-                    medal.style.opacity = "0";
+                    medal.innerText = index + 1;
+                    medal.classList.add("rank");
                 }
 
                 const name = document.createElement("span");
