@@ -253,7 +253,7 @@ position: absolute;
 }
 
 .current-player {
-    border: 4px solid #4caf50;
+    border: 4px solid green;
     background: linear-gradient(145deg, #e8fbe8, #ffffff);
     box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
 }
